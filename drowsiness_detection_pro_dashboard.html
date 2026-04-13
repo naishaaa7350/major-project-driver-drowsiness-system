@@ -1,0 +1,270 @@
+<div style="padding: 1.5rem; background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3e 50%, #0f2340 100%); border-radius: 16px; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e0e0e0;">
+    <style>
+        .glow-text { color: #00d4ff; text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+        .glow-text-purple { color: #a78bfa; text-shadow: 0 0 20px rgba(167, 139, 250, 0.5); }
+        .glow-text-cyan { color: #06b6d4; text-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        .card-dark { background: rgba(20, 30, 60, 0.6); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 12px; padding: 1.25rem; backdrop-filter: blur(10px); }
+        .card-gradient { background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 12px; padding: 1.25rem; backdrop-filter: blur(10px); }
+        .metric-glow { background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); border-left: 4px solid #00d4ff; }
+        .metric-glow-purple { background: linear-gradient(135deg, rgba(167, 139, 250, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%); border-left: 4px solid #a78bfa; }
+        .btn-glow { background: linear-gradient(135deg, #00d4ff 0%, #06b6d4 100%); color: #0f0f1e; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+        .btn-purple { background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%); color: #0f0f1e; }
+        .btn-purple:hover { box-shadow: 0 0 30px rgba(167, 139, 250, 0.5); }
+        .alert-glow { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%); border: 2px solid #ef4444; border-radius: 12px; padding: 1.5rem; color: #fca5a5; animation: pulse-glow 2s infinite; }
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); } 50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.6); } }
+        .detection-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        .detection-box { background: rgba(20, 30, 60, 0.5); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 10px; padding: 1rem; text-align: center; transition: all 0.3s; }
+        .detection-box:hover { background: rgba(20, 30, 60, 0.8); border-color: rgba(0, 212, 255, 0.5); transform: translateY(-2px); box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); }
+        .icon-circle { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%); border: 1px solid rgba(0, 212, 255, 0.3); }
+        .session-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.5) 100%); border: 1px solid rgba(100, 200, 255, 0.2); border-radius: 10px; padding: 1rem; }
+        .live-feed { background: linear-gradient(135deg, rgba(15, 30, 60, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%); border: 2px solid rgba(0, 212, 255, 0.3); border-radius: 12px; height: 320px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1.5rem; }
+        .live-feed::after { content: ''; position: absolute; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0, 212, 255, 0.03) 0px, transparent 1px, transparent 2px, rgba(0, 212, 255, 0.03) 3px); pointer-events: none; animation: scan 8s linear infinite; }
+        @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        .chart-label { color: #a78bfa; font-size: 13px; }
+        h1 { color: #00d4ff; font-size: 32px; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        h2 { color: #a78bfa; font-size: 18px; font-weight: 600; margin: 0; }
+        .subtitle { color: #94a3b8; font-size: 13px; }
+        .stat-value { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #00d4ff, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .slider-container { margin: 1.5rem 0; }
+        input[type="range"] { width: 100%; cursor: pointer; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 2rem; }
+    </style>
+
+    <div style="margin-bottom: 2rem;">
+        <h1>DROWSINESS DETECTION SYSTEM</h1>
+        <p class="subtitle">Real-time neural analysis • Advanced driver monitoring</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="card-gradient metric-glow">
+            <p class="subtitle">System Status</p>
+            <div class="stat-value">ACTIVE</div>
+            <div style="font-size: 12px; color: #4ade80; margin-top: 8px; font-weight: 600;">● ONLINE</div>
+        </div>
+        <div class="card-gradient metric-glow">
+            <p class="subtitle">Alertness Level</p>
+            <div class="stat-value" id="alertness">92%</div>
+            <div style="font-size: 12px; color: #00d4ff; margin-top: 8px;">Optimal</div>
+        </div>
+        <div class="card-gradient metric-glow-purple">
+            <p class="subtitle">Threat Alerts</p>
+            <div class="stat-value" id="alertCount">3</div>
+            <div style="font-size: 12px; color: #a78bfa; margin-top: 8px;">Today</div>
+        </div>
+        <div class="card-gradient metric-glow">
+            <p class="subtitle">Session Duration</p>
+            <div class="stat-value" style="font-size: 22px;" id="sessionTime">2h 34m</div>
+            <div style="font-size: 12px; color: #06b6d4; margin-top: 8px;">In progress</div>
+        </div>
+    </div>
+
+    <div class="card-dark" style="margin-bottom: 2rem;">
+        <div style="margin-bottom: 1.5rem;">
+            <h2>Live Detection Feed</h2>
+            <p class="subtitle" style="margin-top: 4px;">Real-time biometric analysis</p>
+        </div>
+        <div class="live-feed" style="position: relative;">
+            <div style="text-align: center; z-index: 1;">
+                <div style="font-size: 48px; margin-bottom: 12px;">📹</div>
+                <div style="color: #00d4ff; font-size: 14px; font-weight: 600;">CAMERA FEED STREAMING</div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <h3 style="color: #00d4ff; font-size: 14px; font-weight: 600; margin-bottom: 12px;">Detection Metrics</h3>
+            <div class="detection-grid">
+                <div class="detection-box">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(0, 212, 255, 0.2) 100%);">👁️</div>
+                    <p style="color: #94a3b8; font-size: 12px; margin: 8px 0;">Eye Aspect Ratio</p>
+                    <p class="glow-text-cyan" style="font-size: 18px; font-weight: 700; margin: 0;" id="eyelid">0.28</p>
+                </div>
+                <div class="detection-box">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(147, 51, 234, 0.2) 100%);">👁️‍🗨️</div>
+                    <p style="color: #94a3b8; font-size: 12px; margin: 8px 0;">Blinks/Minute</p>
+                    <p class="glow-text-purple" style="font-size: 18px; font-weight: 700; margin: 0;" id="blinkRate">18</p>
+                </div>
+                <div class="detection-box">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.3) 0%, rgba(234, 179, 8, 0.2) 100%);">😴</div>
+                    <p style="color: #94a3b8; font-size: 12px; margin: 8px 0;">Yawn Detection</p>
+                    <p style="color: #fbbf24; font-size: 18px; font-weight: 700; margin: 0; text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);" id="yawnCount">2</p>
+                </div>
+                <div class="detection-box">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.2) 100%);">⚠️</div>
+                    <p style="color: #94a3b8; font-size: 12px; margin: 8px 0;">Risk Score</p>
+                    <p style="color: #f87171; font-size: 18px; font-weight: 700; margin: 0; text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);" id="riskScore">8%</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-glow" onclick="triggerAlert()">Test Alert</button>
+            <button class="btn-purple" onclick="resetMetrics()" style="box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);">Reset Metrics</button>
+            <button class="btn-glow" onclick="togglePause()" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);">Pause Detection</button>
+        </div>
+    </div>
+
+    <div class="alert-glow" id="alertPanel" style="display: none; margin-bottom: 2rem;">
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">⚠️ DROWSINESS DETECTED</div>
+        <div style="font-size: 13px; margin: 8px 0;">Alertness critically low. Immediate intervention required.</div>
+        <div style="font-size: 12px; color: #fca5a5; margin-top: 8px;" id="alertTime">Just now</div>
+    </div>
+
+    <div class="card-dark" style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem;">Detection Sensitivity</h2>
+        <div class="slider-container">
+            <input type="range" id="sensitivitySlider" min="0" max="100" value="70" oninput="updateSensitivity(this.value)" style="accent-color: #00d4ff;">
+            <div style="color: #a78bfa; font-weight: 600; margin-top: 12px; font-size: 14px;">Threshold: <span class="glow-text" id="sensitivityValue">70%</span></div>
+        </div>
+    </div>
+
+    <div class="card-dark" style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1.5rem;">Alertness Trend (Last 60 Minutes)</h2>
+        <canvas id="trendChart" style="max-height: 280px;"></canvas>
+    </div>
+
+    <div style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem;">Today's Sessions</h2>
+        <div class="grid-2">
+            <div class="session-card">
+                <p class="chart-label" style="margin: 0 0 8px 0; font-weight: 600;">06:30 AM - 08:45 AM</p>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Duration:</span>
+                    <span style="color: #00d4ff; font-weight: 600;">2h 15m</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Alerts:</span>
+                    <span style="color: #a78bfa; font-weight: 600;">1</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Avg Alertness:</span>
+                    <span style="color: #4ade80; font-weight: 600;">94%</span>
+                </div>
+            </div>
+            <div class="session-card">
+                <p class="chart-label" style="margin: 0 0 8px 0; font-weight: 600;">02:00 PM - 04:30 PM</p>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Duration:</span>
+                    <span style="color: #00d4ff; font-weight: 600;">2h 30m</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Alerts:</span>
+                    <span style="color: #a78bfa; font-weight: 600;">2</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Avg Alertness:</span>
+                    <span style="color: #4ade80; font-weight: 600;">88%</span>
+                </div>
+            </div>
+            <div class="session-card">
+                <p class="chart-label" style="margin: 0 0 8px 0; font-weight: 600;">Current Session</p>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Duration:</span>
+                    <span class="glow-text-cyan" style="font-weight: 600;" id="currentDuration">2h 34m</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Alerts:</span>
+                    <span class="glow-text-purple" style="font-weight: 600;" id="currentAlerts">3</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin: 6px 0; color: #cbd5e1;">
+                    <span>Avg Alertness:</span>
+                    <span style="color: #4ade80; font-weight: 600;" id="currentAvgAlert">92%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script>
+    let alertnessData = [95, 94, 93, 91, 88, 85, 82, 79, 81, 84, 87, 90, 92, 91, 89, 87, 88, 90, 92];
+    let paused = false;
+
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    const trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 19}, (_, i) => `${i * 3}m`),
+            datasets: [{
+                label: 'Alertness Level (%)',
+                data: alertnessData,
+                borderColor: '#00d4ff',
+                backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointBackgroundColor: '#00d4ff',
+                pointBorderColor: '#0f0f1e',
+                pointBorderWidth: 2,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                filler: { propagate: true }
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    grid: { color: 'rgba(0, 212, 255, 0.1)', drawBorder: false },
+                    ticks: { callback: v => v + '%', color: '#a78bfa', font: { weight: '600' } }
+                },
+                x: {
+                    grid: { color: 'rgba(0, 212, 255, 0.1)', drawBorder: false },
+                    ticks: { color: '#a78bfa', font: { weight: '600' } }
+                }
+            }
+        }
+    });
+
+    setInterval(() => {
+        if (paused) return;
+        
+        const variation = (Math.random() - 0.5) * 10;
+        const newValue = Math.max(0, Math.min(100, alertnessData[alertnessData.length - 1] + variation));
+        alertnessData.push(newValue);
+        if (alertnessData.length > 19) alertnessData.shift();
+
+        document.getElementById('alertness').textContent = Math.round(newValue) + '%';
+        document.getElementById('eyelid').textContent = (0.25 + Math.random() * 0.15).toFixed(2);
+        document.getElementById('blinkRate').textContent = Math.round(15 + Math.random() * 8);
+        document.getElementById('riskScore').textContent = Math.round((100 - newValue) / 10) + '%';
+
+        trendChart.data.labels = Array.from({length: alertnessData.length}, (_, i) => `${i * 3}m`);
+        trendChart.data.datasets[0].data = alertnessData;
+        trendChart.update('none');
+    }, 3000);
+
+    function triggerAlert() {
+        document.getElementById('alertPanel').style.display = 'block';
+        let count = parseInt(document.getElementById('alertCount').textContent);
+        document.getElementById('alertCount').textContent = count + 1;
+        document.getElementById('currentAlerts').textContent = count + 1;
+        setTimeout(() => {
+            document.getElementById('alertPanel').style.display = 'none';
+        }, 4000);
+    }
+
+    function resetMetrics() {
+        alertnessData = [95, 94, 93, 91, 88, 85, 82, 79, 81, 84, 87, 90, 92, 91, 89, 87, 88, 90, 92];
+        document.getElementById('alertness').textContent = '92%';
+        document.getElementById('alertCount').textContent = '0';
+        document.getElementById('currentAlerts').textContent = '0';
+        document.getElementById('riskScore').textContent = '8%';
+        trendChart.update();
+    }
+
+    function togglePause() {
+        paused = !paused;
+        event.target.textContent = paused ? 'Resume Detection' : 'Pause Detection';
+    }
+
+    function updateSensitivity(value) {
+        document.getElementById('sensitivityValue').textContent = value + '%';
+    }
+</script>
