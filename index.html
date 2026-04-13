@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drowsiness Detector</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Driver Alert System</h1>
+        <div class="video-wrapper">
+            <video id="video" width="640" height="480" autoplay muted></video>
+            <canvas id="overlay"></canvas>
+        </div>
+        <div class="stats">
+            <p>Fatigue Score: <span id="score">0</span></p>
+            <p id="status">Status: Monitoring...</p>
+        </div>
+    </div>
+    <audio id="alarm" src="alarm.mp3" loop></audio>
+</body>
+
+</html>
