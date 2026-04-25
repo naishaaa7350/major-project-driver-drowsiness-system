@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Web Platform for Fatigue Monitoring</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+  <style>
+    :root {
+      --ink: #17191f;
+      --soft-ink: #4b515d;
+      --paper: #f6f8fb;
+      --panel: #ffffff;
+      --line: #d8dee8;
+      --teal: #009b95;
+      --teal-dark: #006d69;
+      --coral: #e94f64;
+      --amber: #f2b84b;
+      --green: #20a66a;
+      --charcoal: #252832;
+      --shadow: 0 18px 50px rgba(23, 25, 31, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(0, 155, 149, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(233, 79, 100, 0.05) 1px, transparent 1px),
+        var(--paper);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    button:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    .page {
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+
+    .brand-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--teal-dark);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 4.3rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      width: min(720px, 100%);
+      margin: 14px 0 0;
+      color: var(--soft-ink);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, transparent 0 48%, rgba(242, 184, 75, 0.42) 49% 52%, transparent 53%),
+        #fdfefe;
+      color: var(--ink);
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .road-photo {
+      position: relative;
+      overflow: hidden;
+      min-height: 170px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: var(--charcoal);
+    }
+
+    .road-photo img {
+      width: 100%;
+      height: 100%;
+      min-height: 170px;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.95) contrast(1.02);
+    }
+
+    .road-photo figcaption {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.42fr) minmax(340px, 0.58fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .monitor {
+      display: grid;
+      gap: 14px;
+    }
+
+    .video-panel,
+    .dashboard-panel,
+    .controls-panel,
+    .events-panel,
+    .project-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .video-panel {
+      overflow: hidden;
+    }
+
+    .stage {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      min-height: 320px;
+      background:
+        linear-gradient(135deg, rgba(0, 155, 149, 0.2), transparent 36%),
+        linear-gradient(225deg, rgba(233, 79, 100, 0.16), transparent 34%),
+        #101114;
+      overflow: hidden;
+    }
+
+    video,
+    canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    video {
+      opacity: 0;
+      transition: opacity 240ms ease;
+    }
+
+    video.is-live {
+      opacity: 1;
+    }
+
+    canvas {
+      pointer-events: none;
+    }
+
+    .camera-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: #ffffff;
+      text-align: center;
+      background:
+        linear-gradient(135deg, rgba(0, 155, 149, 0.38), transparent 42%),
+        rgba(16, 17, 20, 0.72);
+    }
+
+    .camera-overlay.is-hidden {
+      display: none;
+    }
+
+    .camera-overlay strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: clamp(1.3rem, 3vw, 2.4rem);
+      letter-spacing: 0;
+    }
+
+    .camera-overlay span {
+      display: block;
+      max-width: 560px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.55;
+    }
+
+    .hud-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border-top: 1px solid var(--line);
+    }
+
+    .hud-item {
+      min-height: 78px;
+      padding: 14px;
+      background: #ffffff;
+    }
+
+    .hud-item span {
+      display: block;
+      color: var(--soft-ink);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hud-item strong {
+      display: block;
+      margin-top: 6px;
+      font-size: clamp(1.1rem, 2vw, 1.65rem);
+      letter-spacing: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px;
+      background: #fbfcfe;
+      border-top: 1px solid var(--line);
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger,
+    .btn-ghost {
+      min-height: 44px;
+      padding: 0 16px;
+      font-weight: 850;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(0, 155, 149, 0.22);
+    }
+
+    .btn-secondary {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    .btn-danger {
+      background: var(--coral);
+      color: #ffffff;
+    }
+
+    .btn-ghost {
+      background: #eef2f6;
+      color: var(--ink);
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .dashboard-panel,
+    .controls-panel,
+    .events-panel,
+    .project-panel {
+      padding: 18px;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      background: #eef8f7;
+      color: var(--teal-dark);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 4px rgba(0, 155, 149, 0.15);
+    }
+
+    .state-readout {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfe;
+    }
+
+    .score-ring {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) 0deg, var(--green) 18deg, #e9edf3 18deg 360deg);
+    }
+
+    .score-ring::before {
+      content: "";
+      position: absolute;
+      inset: 11px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .score-ring strong {
+      position: relative;
+      z-index: 1;
+      font-size: 1.65rem;
+      letter-spacing: 0;
+    }
+
+    .state-title {
+      margin: 0;
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .state-copy {
+      margin: 8px 0 0;
+      color: var(--soft-ink);
+      line-height: 1.45;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .metric {
+      min-height: 92px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .metric span {
+      color: var(--soft-ink);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 1.45rem;
+      letter-spacing: 0;
+    }
+
+    .control-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .control-row {
+      display: grid;
+      gap: 7px;
+    }
+
+    .control-row label,
+    .toggle-row label {
+      color: var(--ink);
+      font-size: 0.86rem;
+      font-weight: 850;
+    }
+
+    select,
+    input[type="range"] {
+      width: 100%;
+    }
+
+    select {
+      min-height: 42px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--ink);
+    }
+
+    input[type="range"] {
+      accent-color: var(--teal);
+    }
+
+    .range-value {
+      color: var(--soft-ink);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 2px;
+    }
+
+    .toggle-row input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--teal);
+    }
+
+    .event-list {
+      display: grid;
+      gap: 8px;
+      min-height: 164px;
+      max-height: 250px;
+      padding: 0;
+      margin: 0;
+      overflow: auto;
+      list-style: none;
+    }
+
+    .event-list li {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfe;
+      color: var(--soft-ink);
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .event-list time {
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .project-panel {
+      display: grid;
+      gap: 10px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .feature {
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--soft-ink);
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 0.86rem;
+    }
+
+    .alarm-mode .status-chip {
+      background: rgba(233, 79, 100, 0.12);
+      color: var(--coral);
+    }
+
+    .alarm-mode .status-dot {
+      box-shadow: 0 0 0 4px rgba(233, 79, 100, 0.16);
+    }
+
+    .alarm-mode .score-ring {
+      background: conic-gradient(var(--coral) 0deg, var(--coral) var(--score-angle), #e9edf3 var(--score-angle) 360deg);
+    }
+
+    .warning-mode .status-chip {
+      background: rgba(242, 184, 75, 0.15);
+      color: #956500;
+    }
+
+    .warning-mode .status-dot {
+      box-shadow: 0 0 0 4px rgba(242, 184, 75, 0.18);
+    }
+
+    .warning-mode .score-ring {
+      background: conic-gradient(var(--amber) 0deg, var(--amber) var(--score-angle), #e9edf3 var(--score-angle) 360deg);
+    }
+
+    .ready-mode .score-ring {
+      background: conic-gradient(var(--green) 0deg, var(--green) var(--score-angle), #e9edf3 var(--score-angle) 360deg);
+    }
+
+    .footer-note {
+      margin: 18px 0 0;
+      color: var(--soft-ink);
+      font-size: 0.86rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @media (max-width: 1120px) {
+      .topbar,
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .road-photo {
+        min-height: 150px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 20px, 1440px);
+        padding-top: 10px;
+      }
+
+      .brand-panel,
+      .state-readout {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-mark {
+        width: 72px;
+        height: 72px;
+      }
+
+      .stage {
+        min-height: 250px;
+      }
+
+      .hud-strip,
+      .metric-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .btn-primary,
+      .btn-secondary,
+      .btn-danger,
+      .btn-ghost {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <section class="brand-panel" aria-labelledby="app-title">
+        <div>
+          <p class="eyebrow">Real-time driver vigilance</p>
+          <h1 id="app-title"> Smart Web Platform for Fatigue Monitoring</h1>
+          <p class="lead">A browser-based drowsiness monitor that studies eye closure, blink behavior, and yawning signals in your device.</p>
+        </div>
+      </section>
+
+      <figure class="road-photo">
+        <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=900&q=80" alt="Driver view of a road through a windshield" />
+        <figcaption>Safety First</figcaption>
+      </figure>
+    </header>
+
+    <main class="app-shell">
+      <section class="monitor" aria-label="Camera monitor">
+        <div class="video-panel">
+          <div class="stage">
+            <video id="inputVideo" playsinline muted></video>
+            <canvas id="overlayCanvas"></canvas>
+            <div id="cameraOverlay" class="camera-overlay">
+              <div>
+                <strong>Initialize the camera</strong>
+                <span>Allow camera access, keep your face inside the frame, then calibrate once while you are alert.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hud-strip" aria-live="polite">
+            <div class="hud-item">
+              <span>Camera</span>
+              <strong id="cameraStatus">Offline</strong>
+            </div>
+            <div class="hud-item">
+              <span>Face Lock</span>
+              <strong id="faceStatus">Waiting</strong>
+            </div>
+            <div class="hud-item">
+              <span>Frame Rate</span>
+              <strong id="fpsValue">0 fps</strong>
+            </div>
+            <div class="hud-item">
+              <span>Session</span>
+              <strong id="sessionTime">00:00</strong>
+            </div>
+          </div>
+
+          <div class="toolbar" aria-label="Main actions">
+            <button id="locationBtn" class="btn-ghost">Track Location</button>  
+            <button id="startBtn" class="btn-primary">Initialize Camera</button>
+            <button id="calibrateBtn" class="btn-secondary" disabled>Calibrate Alert Face</button>
+            <button id="muteBtn" class="btn-ghost" aria-pressed="false">Mute Alarm</button>
+            <button id="stopBtn" class="btn-danger" disabled>Stop Camera</button>
+            <button id="resetBtn" class="btn-ghost">Reset Session</button>
+            <button id="exportBtn" class="btn-ghost">Export Report</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-stack" aria-label="Drowsiness dashboard">
+        <section id="dashboardPanel" class="dashboard-panel ready-mode">
+          <div class="panel-heading">
+            <h2>Detection Dashboard</h2>
+            <div id="stateChip" class="status-chip"><span class="status-dot"></span><span id="stateChipText">Ready</span></div>
+            <div class="metric">
+            <span>Location</span>
+            <strong id="locationStatus">Not tracked</strong>
+            </div>
+
+          </div>
+
+          <div class="state-readout">
+            <div id="scoreRing" class="score-ring" style="--score-angle: 18deg;">
+              <strong id="fatigueScore">5</strong>
+            </div>
+            <div>
+              <p id="stateTitle" class="state-title">Alert</p>
+              <p id="stateCopy" class="state-copy">Initialize the camera to begin live drowsiness detection.</p>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <span>Eye Ratio</span>
+              <strong id="eyeRatio">0.00</strong>
+              
+            </div>
+            <div class="metric">
+              <span>Mouth Ratio</span>
+              <strong id="mouthRatio">0.00</strong>
+            </div>
+            <div class="metric">
+              <span>Blinks</span>
+              <strong id="blinkCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>Yawns</span>
+              <strong id="yawnCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>Alerts</span>
+              <strong id="alertCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>Alarm</span>
+              <strong id="alarmStatus">Silent</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="controls-panel">
+          <div class="panel-heading">
+            <h2>Camera And Sensitivity</h2>
+          </div>
+
+          <div class="control-list">
+            <div class="control-row">
+              <label for="cameraSelect">Camera Source</label>
+              <select id="cameraSelect">
+                <option value="">Default camera</option>
+              </select>
+            </div>
+
+            <div class="control-row">
+              <label for="eyeThreshold">Eye-closure threshold</label>
+              <input id="eyeThreshold" type="range" min="0.12" max="0.34" step="0.01" value="0.21" />
+              <span id="eyeThresholdValue" class="range-value">0.21 EAR</span>
+            </div>
+
+            <div class="control-row">
+              <label for="mouthThreshold">Yawn threshold</label>
+              <input id="mouthThreshold" type="range" min="0.18" max="0.60" step="0.01" value="0.34" />
+              <span id="mouthThresholdValue" class="range-value">0.34 MAR</span>
+            </div>
+
+            <div class="control-row">
+              <label for="recoveryHold">Alert recovery hold</label>
+              <input id="recoveryHold" type="range" min="1.5" max="5" step="0.5" value="2.5" />
+              <span id="recoveryHoldValue" class="range-value">2.5 seconds clear</span>
+            </div>
+
+            <div class="toggle-row">
+              <label for="landmarkToggle">Show face landmarks</label>
+              <input id="landmarkToggle" type="checkbox" checked />
+            </div>
+
+            <div class="toggle-row">
+              <label for="voiceToggle">Voice warning</label>
+              <input id="voiceToggle" type="checkbox" checked />
+            </div>
+          </div>
+        </section>
+
+        <section class="events-panel">
+          <div class="panel-heading">
+            <h2>Event Timeline</h2>
+            <button id="clearEventsBtn" class="btn-ghost">Clear</button>
+          </div>
+          <ul id="eventList" class="event-list" aria-live="polite">
+            <li><time>Now</time><span>Session ready. Start the camera to begin.</span></li>
+          </ul>
+        </section>
+
+        <section class="project-panel">
+          <div class="panel-heading">
+            <h2>Major Project Modules</h2>
+          </div>
+          <div class="feature-grid">
+            <div class="feature"><strong>Camera Initialization</strong>Permission flow, source selection, live status, and stop control.</div>
+            <div class="feature"><strong>Signal Processing</strong>Eye Aspect Ratio and Mouth Aspect Ratio from facial landmarks.</div>
+            <div class="feature"><strong>Alarm System</strong>Buzzer and spoken warning until the user returns to alert posture.</div>
+            <div class="feature"><strong>Local Dashboard</strong>Session metrics, calibration, timeline, and downloadable report.</div>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <p class="footer-note">For best results, use good lighting, keep the face centered, and calibrate once after the camera starts.</p>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+  
+</body>
+</html>
